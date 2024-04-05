@@ -1,0 +1,14 @@
+#!/bin/sh
+
+mkdir $SYSROOT
+
+cd $SYSROOT
+
+mkdir boot
+
+mkdir usr
+mkdir usr/bin
+mkdir usr/lib
+mkdir usr/include
+ln -s usr/bin bin
+ln -s usr/lib lib

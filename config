@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -z "$BUILDROOT" ]; then
+	BUILDROOT=$SOURCEROOT
+fi
+SYSROOT=$PWD/sysroot
+
+if [ -z "$ARCH" ]; then
+	ARCH=amd64
+fi
+NPROC=$(nproc)
+
+export ARCH_NAME=$ARCH

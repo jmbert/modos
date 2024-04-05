@@ -1,0 +1,6 @@
+**.d
+**.o
+kernel/kernel
+sysroot
+
+bootable_kernel

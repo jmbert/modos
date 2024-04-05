@@ -1,0 +1,13 @@
+#!/bin/sh
+
+BUILDROOT=$PWD
+SOURCEROOT=$(dirname $(readlink -f $0))
+
+. $SOURCEROOT/config
+
+case $ARCH in
+	amd64)
+		qemu-system-x86_64 -d int $SOURCEROOT/bootable_kernel
+		;;
+
+esac

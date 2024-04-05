@@ -1,0 +1,9 @@
+#!/bin/sh
+
+BUILDROOT=$PWD
+SOURCEROOT=$(dirname $(readlink -f $0))
+
+. $SOURCEROOT/config
+
+cd kernel
+make clean

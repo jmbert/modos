@@ -1,0 +1,27 @@
+#!/bin/sh
+
+BUILDROOT=$PWD
+SOURCEROOT=$(dirname $(readlink -f $0))
+
+. $SOURCEROOT/config
+
+. $SOURCEROOT/setup_sysroot
+
+# Building
+MAKEFLAGS=-j$NPROC
+CFLAGS=-O2
+export CFLAGS
+
+set -e
+
+cd $SOURCEROOT/kernel
+make INSTALL_DESTINATION=$SYSROOT/usr/include $MAKEFLAGS  install_headers
+
+make HEADERS=$SYSROOT/usr/include $MAKEFLAGS build_kernel
+make INSTALL_DESTINATION=$SYSROOT/boot $MAKEFLAGS install_kernel
+
+cd $SOURCEROOT
+
+cp --preserve=all -r extra/grub $SYSROOT/boot/
+
+grub-mkrescue -o bootable_kernel $SYSROOT

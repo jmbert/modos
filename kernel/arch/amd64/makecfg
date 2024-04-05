@@ -1,0 +1,11 @@
+
+
+ARCH_HEADERS=$(ARCH_DIR)/include
+ARCH_CFLAGS=
+ARCH_GNUPREFIX=x86_64-elf-
+
+ARCH_OBJECTS=\
+	$(ARCH_DIR)/boot/p32/pmodeEntry.o\
+	$(ARCH_DIR)/boot/entry.o
+	
+ARCH_LINKER=$(ARCH_DIR)/link_kernel.ld
