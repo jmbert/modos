@@ -5,11 +5,6 @@ if [ -z "$BUILDROOT" ]; then
 fi
 SYSROOT=$PWD/sysroot
 
-if [ -z "$ARCH" ]; then
-	ARCH=amd64
-fi
 NPROC=$(nproc)
-
-export ARCH_NAME=$ARCH
 
 export SERIAL_PORT=0x3F8

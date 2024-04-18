@@ -3,11 +3,7 @@
 BUILDROOT=$PWD
 SOURCEROOT=$(dirname $(readlink -f $0))
 
-. $SOURCEROOT/config
-
-case $ARCH in
-	amd64)
-		qemu-system-x86_64 -enable-kvm -m 16G -serial stdio $SOURCEROOT/bootable_kernel
-		;;
+qemu-system-x86_64 -enable-kvm -m 16G -serial stdio $SOURCEROOT/bootable_kernel
+		
 
 esac
