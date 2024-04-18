@@ -7,7 +7,7 @@ SOURCEROOT=$(dirname $(readlink -f $0))
 
 case $ARCH in
 	amd64)
-		qemu-system-x86_64 -d int $SOURCEROOT/bootable_kernel
+		qemu-system-x86_64 -enable-kvm -m 16G -serial stdio $SOURCEROOT/bootable_kernel
 		;;
 
 esac

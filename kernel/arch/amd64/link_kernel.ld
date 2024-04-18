@@ -2,33 +2,58 @@
 
 ENTRY(pmode_entry);
 
-KERNEL_START_LOW = 1M;
+__KERNEL_START_LOW = 1M;
 
-KERNEL_START = -2048M;
+__KERNEL_TEXT = -2048M;
 
 SECTIONS {
-	. = KERNEL_START_LOW;
+	. = __KERNEL_START_LOW;
 
 	.multiboot : {
 		* ( .multiboot )
 	} :multiboot
 
-	KERNEL_TEXT_START_LOW = .;
+	__KERNEL_TEXT_START_LOW = .;
 
 	.text.low : {
 		* ( .text.low )
 	} :low_text
 	
+	.data.low : {
+		* ( .data.low )
+	} :low_data
+	
 	.bss.low : {
 		* ( .data.low )
 	} :low_data
 
-	KERNEL_LOW_END = .;
-	. = KERNEL_START;
+	. = ALIGN(2M);
 
-	.text : AT ( KERNEL_LOW_END ) {
+	__KERNEL_TEXT_PHYSICAL = .;
+	. = __KERNEL_TEXT;
+
+	__KERNEL_RELOC_OFFSET = __KERNEL_TEXT - __KERNEL_TEXT_PHYSICAL;
+
+	.text : AT ( ADDR(.text) - __KERNEL_RELOC_OFFSET ) {
 		* ( .text )
 	} :text
+
+	.data : AT ( ADDR(.data) - __KERNEL_RELOC_OFFSET ) {
+		* ( .data )
+	} :data
+
+	.rodata : AT ( ADDR(.rodata) - __KERNEL_RELOC_OFFSET ) {
+		* ( .rodata )
+	} :data
+
+	.bss : AT ( ADDR(.bss) - __KERNEL_RELOC_OFFSET ) {
+		* ( .text )
+	} :data
+
+	. = ALIGN(4K);
+
+	__KERNEL_END = .;
+	__KERNEL_SIZE = __KERNEL_END - __KERNEL_TEXT;
 }
 
 PHDRS {

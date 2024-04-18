@@ -1,11 +1,22 @@
 
 
 ARCH_HEADERS=$(ARCH_DIR)/include
-ARCH_CFLAGS=
+ARCH_CFLAGS+=\
+	-DSERIAL_PORT=$(SERIAL_PORT)\
+	-mno-red-zone -mno-mmx -mno-sse -mno-sse2
+	
 ARCH_GNUPREFIX=x86_64-elf-
 
 ARCH_OBJECTS=\
 	$(ARCH_DIR)/boot/p32/pmodeEntry.o\
-	$(ARCH_DIR)/boot/entry.o
+	$(ARCH_DIR)/entry.o\
+	$(ARCH_DIR)/seriallog.o\
+	$(ARCH_DIR)/mm/hhdm.o\
+	$(ARCH_DIR)/mm/pm/setup_pm.o\
+	$(ARCH_DIR)/mm/pm/alloc_pages.o\
+	$(ARCH_DIR)/mm/pm/parse_memory_map.o\
+	$(ARCH_DIR)/mm/vm/setup_vm.o\
+	$(ARCH_DIR)/mm/vm/switch_stack.o\
+	$(ARCH_DIR)/mm/vm/map_pages.o
 	
 ARCH_LINKER=$(ARCH_DIR)/link_kernel.ld

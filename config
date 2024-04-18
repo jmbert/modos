@@ -11,3 +11,5 @@ fi
 NPROC=$(nproc)
 
 export ARCH_NAME=$ARCH
+
+export SERIAL_PORT=0x3F8

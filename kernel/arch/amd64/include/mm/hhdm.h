@@ -1,0 +1,9 @@
+
+
+#ifndef _HHDM_H
+#define _HHDM_H
+
+#define HHDM_BEGIN 	0xFFFF800000000000
+#define HHDM_SIZE	0x0000400000000000
+
+#endif

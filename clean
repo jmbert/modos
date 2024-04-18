@@ -7,3 +7,4 @@ SOURCEROOT=$(dirname $(readlink -f $0))
 
 cd kernel
 make clean
+rm -rf $SYSROOT
