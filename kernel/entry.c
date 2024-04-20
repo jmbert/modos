@@ -11,6 +11,8 @@
 #include <gdt.h>
 #include <apic.h>
 #include <acpi.h>
+#include <kinfo.h>
+#include <proc.h>
 
 __noreturn void entry(void *mbbootinfo) {
 	init_serial();
@@ -28,7 +30,12 @@ __noreturn void entry(void *mbbootinfo) {
 	enable_apic();
 	enable_idt();
 
+	state.n_procs = 1;
+	struct process *init_proc = kmalloc(sizeof(*init_proc));
 
+	state.procs[0] = init_proc;
+
+	exec_file("/bin/init", init_proc);
 
 	for (;;);
 }

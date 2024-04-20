@@ -6,6 +6,10 @@
 #include <stdint.h>
 #include <mm/hhdm.h>
 #include <stddef.h>
+#include <export.h>
+
+#define VM_BEGIN_REQUEST 	0xFFFFFFFF00000000
+#define VM_END_REQUEST 		0xFFFFFFFF60000000
 
 void setup_hhdm();
 void setup_vm();
@@ -13,6 +17,10 @@ void setup_vm();
 int map_pages(void *vaddr, uintptr_t paddr, size_t n_pages, uint16_t flags);
 
 int mapalloc_pages(void *vaddr, size_t n_pages, uint16_t flags);
+
+void *request_pages(uintptr_t paddr, size_t n_pages, uint16_t flags);
+void *kmalloc(size_t size);
+extern void switch_stack(uintptr_t new_stack, uintptr_t new_stack_top);
 
 static inline uintptr_t get_toplevel_real() {
 	uintptr_t ptr;
@@ -38,5 +46,8 @@ enum pg_flags {
 };
 
 extern uintptr_t get_toplevel();
+extern void set_toplevel(uintptr_t new);
+
+void activate_toplevel();
 
 #endif

@@ -103,7 +103,7 @@ static int map_page(void *vaddr, uintptr_t paddr, uint16_t flags) {
 
 alloc:
 	if (table[offset] & PG_PRESENT) {
-		log_printf("Page already in use %p\n", table[offset]);
+		log_printf("Page %p:%x already in use %p\n", table, offset, table[offset]);
 		return 1;
 	}
 	table[offset] = paddr | (flags & 0xFFF) | PG_PRESENT;

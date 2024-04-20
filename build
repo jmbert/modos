@@ -5,7 +5,9 @@ SOURCEROOT=$(dirname $(readlink -f $0))
 
 . $SOURCEROOT/config
 
-. $SOURCEROOT/setup_sysroot
+. $SOURCEROOT/setup_sysroot $SYSROOT
+mkdir $SYSROOT/boot
+. $SOURCEROOT/setup_sysroot $INITRD
 
 # Building
 MAKEFLAGS=-j$NPROC
@@ -20,7 +22,23 @@ make INSTALL_DESTINATION=$SYSROOT/usr/include $MAKEFLAGS  install_headers
 make HEADERS=$SYSROOT/usr/include $MAKEFLAGS build_kernel
 make INSTALL_DESTINATION=$SYSROOT/boot $MAKEFLAGS install_kernel
 
+cd $SOURCEROOT/modules
+
+make KERNEL_HEADERS=$SYSROOT/usr/include $MAKEFLAGS build_modules
+
+make INSTALL_DESTINATION=$SYSROOT/usr/lib/modules $MAKEFLAGS install_modules
+make INSTALL_DESTINATION=$INITRD/usr/lib/modules $MAKEFLAGS install_modules
+
+cd $SOURCEROOT/programs
+
+make $MAKEFLAGS build_programs
+
+make INSTALL_DESTINATION=$SYSROOT/usr/bin $MAKEFLAGS install_programs
+make INSTALL_DESTINATION=$INITRD/usr/bin $MAKEFLAGS install_programs
+
 cd $SOURCEROOT
+
+tar cf $SYSROOT/boot/initrd -C $INITRD usr
 
 cp --preserve=all -r extra/grub $SYSROOT/boot/
 

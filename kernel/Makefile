@@ -19,6 +19,8 @@ OBJECTS=\
 	mm/vm/setup_vm.o\
 	mm/vm/switch_stack.o\
 	mm/vm/map_pages.o\
+	mm/vm/request_pages.o\
+	mm/vm/kmalloc.o\
 	idt/register_handler.o\
 	idt/lidt.o\
 	idt/entry_shim.o\
@@ -31,7 +33,10 @@ OBJECTS=\
 	acpi/init_acpi.o\
 	acpi/search_madt.o\
 	bios/init_biosdata.o\
-	irq/irq_handler.o
+	irq/irq_handler.o\
+	proc/exec_process.o\
+	proc/exec_file.o\
+	proc/switch_process.o\
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 

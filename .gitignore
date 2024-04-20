@@ -1,6 +1,7 @@
 **.d
 **.o
 kernel/kernel
-sysroot
+sysroot/
+initrd/
 
 bootable_kernel

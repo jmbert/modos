@@ -1,14 +1,13 @@
 #!/bin/sh
 
-mkdir $SYSROOT
+mkdir $1
 
-cd $SYSROOT
-
-mkdir boot
+cd $1
 
 mkdir usr
 mkdir usr/bin
 mkdir usr/lib
+mkdir usr/lib/modules
 mkdir usr/include
 ln -s usr/bin bin
 ln -s usr/lib lib

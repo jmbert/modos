@@ -4,6 +4,7 @@ if [ -z "$BUILDROOT" ]; then
 	BUILDROOT=$SOURCEROOT
 fi
 SYSROOT=$PWD/sysroot
+INITRD=$PWD/initrd
 
 NPROC=$(nproc)
 

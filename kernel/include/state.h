@@ -25,6 +25,8 @@ struct kernel_state {
 	struct rsdt *rsdt;
 	struct madt *madt;
 
+	struct process *procs[0xFFFF];
+	size_t n_procs;
 };
 
 extern struct kernel_state state;

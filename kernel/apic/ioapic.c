@@ -46,4 +46,5 @@ uint64_t read_gsid_redir(uint8_t gsid) {
 			return read_ioapic_redir(ioapic, gsid-ioapic->gsid_base);
 		}
 	}
+	return 0;
 }

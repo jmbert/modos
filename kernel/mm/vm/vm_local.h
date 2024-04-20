@@ -6,12 +6,4 @@
 
 extern uintptr_t toplevel;
 
-static inline void activate_toplevel() {
-	asm("mov %0, %%cr3" 
-		::
-		"r"(toplevel));
-}
-
-extern void switch_stack(uintptr_t new_stack, uintptr_t new_stack_top);
-
 #endif
