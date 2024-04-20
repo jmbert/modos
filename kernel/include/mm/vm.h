@@ -23,6 +23,20 @@ static inline uintptr_t get_toplevel_real() {
 	return ptr;
 }
 
+#define MAP_HUGE (1 << 12)
+enum pg_flags {
+	PG_PRESENT = 	1 << 0,
+	PG_WRITE = 	1 << 1,
+	PG_USER =	1 << 2,
+	PG_PWT = 	1 << 3,
+	PG_PCD = 	1 << 4,
+	PG_ACCESSED = 	1 << 5,
+	PG_DIRTY = 	1 << 6,
+	PG_SIZE = 	1 << 7,
+	PG_PAT = 	1 << 7,
+	PG_GLOBAL = 	1 << 8,
+};
+
 extern uintptr_t get_toplevel();
 
 #endif

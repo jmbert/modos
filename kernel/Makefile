@@ -18,7 +18,20 @@ OBJECTS=\
 	mm/pm/parse_memory_map.o\
 	mm/vm/setup_vm.o\
 	mm/vm/switch_stack.o\
-	mm/vm/map_pages.o
+	mm/vm/map_pages.o\
+	idt/register_handler.o\
+	idt/lidt.o\
+	idt/entry_shim.o\
+	traps/enable_traps.o\
+	traps/exception_handlers.o\
+	gdt/reload_gdt.o\
+	apic/lapic.o\
+	apic/ioapic.o\
+	apic/enable_apic.o\
+	acpi/init_acpi.o\
+	acpi/search_madt.o\
+	bios/init_biosdata.o\
+	irq/irq_handler.o
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 

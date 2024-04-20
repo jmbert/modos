@@ -10,4 +10,6 @@ int strlen(char *str);
 
 void *memcpy(void *dest, void *src, size_t n);
 
+int memcmp(void *dest, void *src, size_t n);
+
 #endif

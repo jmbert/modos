@@ -2,7 +2,7 @@
 
 #include <mm/vm.h>
 #include <stddef.h>
-#include <arch_compiler.h>
+#include <compiler.h>
 #include <linkage.h>
 #include <mm/mmhelpers.h>
 
