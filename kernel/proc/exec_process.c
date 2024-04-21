@@ -104,5 +104,7 @@ __noreturn void exec_process(struct process *proc) {
 	user_stack -= sizeof(struct regs); // Registers
 	*(struct regs *)user_stack = init_regs;
 
+	log_printf("Executing at %p\n", proc->entry_point);
+
 	switch_process(user_stack, GDT_USER_DATA | 0x3);
 }

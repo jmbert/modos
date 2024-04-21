@@ -5,7 +5,11 @@ SOURCEROOT=$(dirname $(readlink -f $0))
 
 . $SOURCEROOT/config
 
-cd kernel
+cd $SOURCEROOT/kernel
+make clean
+cd $SOURCEROOT/modules
+make clean
+cd $SOURCEROOT/programs
 make clean
 cd $SOURCEROOT
 rm -rf $SYSROOT

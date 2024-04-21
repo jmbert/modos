@@ -23,6 +23,8 @@ LD=$(GNUPREFIX)ld
 OBJECTS=\
 	init.o
 
+DEPENDENCIES=$(OBJECTS:.o=.d)
+
 %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 %.o:%.S
@@ -30,3 +32,8 @@ OBJECTS=\
 
 $(PROGRAM): $(OBJECTS)
 	$(LD) $(LDFLAGS) -o $@ $^
+
+clean:
+	-rm $(PROGRAM) $(OBJECTS) $(DEPENDENCIES)
+
+-include $(DEPENDENCIES)

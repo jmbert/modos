@@ -14,3 +14,9 @@ ifndef INSTALL_DESTINATION
 	$(error No module destination specified)
 endif
 	cp --preserve=all $(ROOT_DIR)/bin/* $(INSTALL_DESTINATION)/
+
+clean:
+	-rm -rf $(ROOT_DIR)/bin
+	for program in $(PROGRAMS); do\
+		make -C $$program $(MAKEFLAGS) clean;\
+	done

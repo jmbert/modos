@@ -7,6 +7,7 @@
 #include <cpu.h>
 #include <compiler.h>
 #include <fs.h>
+#include <elf.h>
 
 #define USER_STACK_TOP 0x00007fffffffffff
 
@@ -17,24 +18,6 @@ struct process_mapping {
 	void *end;
 	void *data_ref;
 	uint16_t flags;
-};
-
-enum a_types {
-	AT_NULL,
-	AT_IGNORE,
-	AT_EXECFD,
-	AT_PHDR,
-	AT_PHENT,
-	AT_PHNUM,
-	AT_PAGESZ,
-	AT_BASE,
-	AT_FLAGS,
-	AT_ENTRY,
-	AT_NOTELF,
-	AT_UID,
-	AT_EUID,
-	AT_GID,
-	AT_EGID,
 };
 
 struct auxv {
@@ -69,5 +52,9 @@ struct process {
 __noreturn void exec_process(struct process *proc);
 
 __noreturn void exec_file(char *path, struct process *proc); 
+
+void exec_elf(struct file *file, struct process *proc);
+
+#define HDR_MAX_LEN 256
 
 #endif

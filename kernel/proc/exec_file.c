@@ -2,21 +2,20 @@
 #include <proc.h>
 #include <fs.h>
 #include <panic.h>
-#include <elf.h>
+#include <mm/vm.h>
 
 __noreturn void exec_file(char *path, struct process *proc) {
 
 	struct file *init_file = open(path);
 	if (init_file == NULL) {
-		panic("Couldn't execute file\n");
+		panic("Couldn't open file\n");
 	}
 
-	Elf64_Ehdr hdr;
+	char *test_hdr = kmalloc(sizeof(char)*HDR_MAX_LEN);
 
-	init_file->vnode->fops->read(init_file, &hdr, sizeof(hdr), 0);
+	init_file->vnode->fops->read(init_file, test_hdr, HDR_MAX_LEN, 0);
 
-	log_printf("%p\n", &hdr);
-	asm("cli;hlt");
+	exec_elf(init_file, proc);
 
-	exec_process(proc);
+	panic("Failed to find execution handler\n");
 }

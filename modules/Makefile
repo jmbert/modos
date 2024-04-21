@@ -13,3 +13,8 @@ ifndef INSTALL_DESTINATION
 	$(error No module destination specified)
 endif
 	cp --preserve=all *.ko $(INSTALL_DESTINATION)/
+
+clean:
+	for type in $(MODTYPES); do\
+		make -C $$type $(MAKEFLAGS) clean;\
+	done

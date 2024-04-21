@@ -43,7 +43,8 @@ OBJECTS=\
 	tar/tar_fileops.o\
 	fs/fsutils.o\
 	fs/open.o\
-	fs/walk_path.o
+	fs/walk_path.o\
+	proc/exec_elf.o
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 
