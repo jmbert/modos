@@ -11,6 +11,7 @@ OBJECTS=\
 	state.o \
 	boot/p32/pmodeEntry.o\
 	entry.o\
+	create_initrd.o\
 	seriallog.o\
 	mm/hhdm.o\
 	mm/pm/setup_pm.o\
@@ -37,6 +38,12 @@ OBJECTS=\
 	proc/exec_process.o\
 	proc/exec_file.o\
 	proc/switch_process.o\
+	ramdisk/new_ramdisk_mount.o\
+	tar/create_vfs.o\
+	tar/tar_fileops.o\
+	fs/fsutils.o\
+	fs/open.o\
+	fs/walk_path.o
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 

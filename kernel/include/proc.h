@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <cpu.h>
 #include <compiler.h>
+#include <fs.h>
 
 #define USER_STACK_TOP 0x00007fffffffffff
 
@@ -61,6 +62,8 @@ struct process {
 	struct regs regs;
 
 	uintptr_t cr3_phys;
+
+	struct vfs_node *root;
 };
 
 __noreturn void exec_process(struct process *proc);

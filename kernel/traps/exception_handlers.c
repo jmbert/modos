@@ -11,7 +11,7 @@ void default_trap_handler(struct regs *regs) {
 void page_fault_handler(struct regs *regs) {
 	uint64_t fault_addr;
 	asm volatile (
-		"mov %%cr3, %0\n" :
+		"mov %%cr2, %0\n" :
 		"=r"(fault_addr)
 	);
 	panic("Unhandled page fault\n"

@@ -1,5 +1,9 @@
 #!/bin/sh
 
+if [ -d $1 ]; then
+echo "Already created $1"
+else
+
 mkdir $1
 
 cd $1
@@ -11,3 +15,5 @@ mkdir usr/lib/modules
 mkdir usr/include
 ln -s usr/bin bin
 ln -s usr/lib lib
+
+fi

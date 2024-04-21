@@ -47,7 +47,8 @@ SECTIONS {
 	} :data
 
 	.bss : AT ( ADDR(.bss) - __KERNEL_RELOC_OFFSET ) {
-		* ( .text )
+		* ( .bss )
+		* ( .lbss )
 	} :data
 
 	. = ALIGN(4K);

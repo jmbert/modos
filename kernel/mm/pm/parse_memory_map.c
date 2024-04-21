@@ -58,7 +58,6 @@ size_t parse_memmap(void *bootmap, struct memmap_entry *list) {
 				size_written += sizeof(struct memmap_entry);
 			}
 		}
-
 	} else {
 		log_printf("No physical memory map found\n");
 		return 0;

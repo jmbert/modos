@@ -1,6 +1,7 @@
 
 #include <mm/vm.h>
 #include <mm/mmhelpers.h>
+#include <log.h>
 
 uintptr_t current_base = 0;
 uintptr_t current_offset = 0;
@@ -18,10 +19,9 @@ void *kmalloc(size_t size) {
 		return NULL;
 	}
 
-	current_offset = 0;
+	current_offset = size;
 	current_size = (size/PAGE_SIZE + 1) * PAGE_SIZE;
 	current_base = (uintptr_t)(new);
-
 	return new;
 }
 

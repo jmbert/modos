@@ -28,7 +28,6 @@ void activate_toplevel() {
 
 void setup_vm() {
 	toplevel = alloc_pages(1); // Allocate page for the toplevel map
-	log_printf("Toplevel set to %p\n", toplevel);
 
 	log_printf("Mapping kernel at %p from %p (%lx)\n", KERNEL_TEXT, KERNEL_TEXT-KERNEL_RELOC_OFFSET, KERNEL_SIZE);
 	int ret = map_pages((void*)KERNEL_TEXT, KERNEL_TEXT - KERNEL_RELOC_OFFSET, KERNEL_SIZE / PAGE_SIZE, PG_WRITE);

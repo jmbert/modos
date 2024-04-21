@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <apic.h>
 #include <acpi.h>
+#include <proc.h>
 
 enum kernel_flags {
 	SERIAL_ENABLED = 1 << 0,
@@ -26,7 +27,8 @@ struct kernel_state {
 	struct madt *madt;
 
 	struct process *procs[0xFFFF];
-	size_t n_procs;
+	pid n_procs;
+	pid current_pid;
 };
 
 extern struct kernel_state state;

@@ -38,7 +38,7 @@ make INSTALL_DESTINATION=$INITRD/usr/bin $MAKEFLAGS install_programs
 
 cd $SOURCEROOT
 
-tar cf $SYSROOT/boot/initrd -C $INITRD usr
+tar -p --format ustar -c -f $SYSROOT/boot/initrd -C $INITRD usr bin lib
 
 cp --preserve=all -r extra/grub $SYSROOT/boot/
 
