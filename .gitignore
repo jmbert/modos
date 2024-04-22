@@ -4,4 +4,10 @@ kernel/kernel
 sysroot/
 initrd/
 
+**.ko
+programs/bin
+
+log.txt
+serial.txt
+
 bootable_kernel

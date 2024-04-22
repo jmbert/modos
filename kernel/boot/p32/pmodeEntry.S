@@ -112,6 +112,7 @@ gdtr:
 .2byte (gdt_end-gdt-1)
 .4byte gdt
 
+.global gdt
 gdt:
 .8byte 0
 // PL0 Code
@@ -143,4 +144,11 @@ codeaccess:
 .byte	0xF2
 .byte 	0xCF
 .byte 	0x00
+// TSS Reserved
+.4byte 0x0000
+.byte 0x00
+.byte 0x89
+.byte 0x00
+.2byte 0x00
+.8byte 0x00
 gdt_end:

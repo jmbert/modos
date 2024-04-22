@@ -1,8 +1,8 @@
 
 
-MODROOT=$(ROOT_DIR)/drivers/keyboard_ps2/
+MODROOT=$(ROOT_DIR)/drivers/serial_com/
 
-MODULE=$(ROOT_DIR)/keyboard_ps2.ko
+MODULE=$(ROOT_DIR)/serial_com.ko
 
 GNUPREFIX=x86_64-elf-
 

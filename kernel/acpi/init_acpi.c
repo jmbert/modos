@@ -57,8 +57,10 @@ found_xsdp:
 		panic("Unknown ACPI version %x\n", xsdp->revision);
 		break;
 	}
+	log_printf("RSDT: %p:%x\n", state.rsdt, state.rsdt->hdr.len);
 
 	state.madt = find_table(state.rsdt, madt_id);
+	log_printf("MADT: %p:%x\n", state.madt, state.madt->hdr.len);
 	if (!state.madt) {
 		panic("No APIC table found\n");
 	}

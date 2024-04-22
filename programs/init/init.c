@@ -1,5 +1,5 @@
 
 
 void init() {
-	for (;;);	
+	
 }

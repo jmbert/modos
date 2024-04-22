@@ -15,7 +15,8 @@
 #include <proc.h>
 #include <fs/ramdisk.h>
 #include <fs/tar.h>
-
+#include <syscalls.h>
+#include <tss.h>
 
 struct vfs_mount *create_initrd(void *mbbootinfo);
 
@@ -32,11 +33,14 @@ __noreturn void entry(void *mbbootinfo) {
 	setup_pm(mbbootinfo);
 	setup_vm();
 
+	init_tss();
+
 	init_biosdata();
 	init_acpi();
 
 	enable_traps();
 	enable_apic();
+	register_syscalls();
 	enable_idt();
 
 

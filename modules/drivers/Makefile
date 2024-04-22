@@ -1,7 +1,7 @@
 
 export ROOT_DIR
 
-DRIVERS=keyboard_ps2
+DRIVERS=serial_com
 
 all_drivers: 
 	for driver in $(DRIVERS); do\

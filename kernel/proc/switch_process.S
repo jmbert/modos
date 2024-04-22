@@ -10,8 +10,12 @@ switch_process:
 	mov %ax, %fs
 	mov %ax, %gs
 
-
 	mov %rdi, %rsp
+
+	mov $SAVE_SIZE, %rcx
+	add $0x28, %rcx
+	lea (%rsp, %rcx), %rdi
+	call *%rdx
 
 	RESTORE_REGS
 	iretq

@@ -44,7 +44,12 @@ OBJECTS=\
 	fs/fsutils.o\
 	fs/open.o\
 	fs/walk_path.o\
-	proc/exec_elf.o
+	proc/exec_elf.o\
+	syscalls/register_syscalls.o\
+	syscalls/enable_syscalls.o\
+	syscalls/sysentry.o\
+	tss/init_tss.o\
+	tss/switch_stack.o
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 

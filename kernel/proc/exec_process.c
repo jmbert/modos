@@ -8,6 +8,8 @@
 #include <gdt.h>
 #include <compiler.h>
 #include <log.h>
+#include <kinfo.h>
+#include <tss.h>
 
 static int load_mapping(struct process_mapping procmap) {
 	ptrdiff_t size = procmap.end - procmap.begin;
@@ -24,7 +26,7 @@ static int load_mapping(struct process_mapping procmap) {
 	return ret;
 }
 
-extern __noreturn void switch_process(void *rsp, uint8_t dseg);
+extern __noreturn void switch_process(void *rsp, uint8_t dseg, void *tss_rsp_fp);
 
 __noreturn void exec_process(struct process *proc) {
 	proc->cr3_phys = alloc_pages(1);
@@ -94,17 +96,21 @@ __noreturn void exec_process(struct process *proc) {
 	init_regs.cs = GDT_USER_CODE | 0x3;
 	init_regs.ss = GDT_USER_DATA | 0x3;
 	init_regs.rip = proc->entry_point;
-	init_regs.rflags = 0;
+	init_regs.rflags = 0x002;
 
 	init_regs.error_code = 0;
 	init_regs.irq = 0x80;
 
 	proc->regs = init_regs;
 
-	user_stack -= sizeof(struct regs); // Registers
-	*(struct regs *)user_stack = init_regs;
+	proc->kernel_stack = request_pages(0, STACK_SIZE / PAGE_SIZE, PG_WRITE) + STACK_SIZE;
+	log_printf("Process kernel stack at %p\n", proc->kernel_stack);
+
+	proc->kernel_stack -= sizeof(struct regs); // Registers
+	*(struct regs *)proc->kernel_stack = init_regs;
 
 	log_printf("Executing at %p\n", proc->entry_point);
 
-	switch_process(user_stack, GDT_USER_DATA | 0x3);
+	state.current_pid = proc->_pid;
+	switch_process(proc->kernel_stack, GDT_USER_DATA | 0x3, (void*)switch_tss_stack);
 }

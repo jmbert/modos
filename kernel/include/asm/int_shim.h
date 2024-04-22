@@ -38,7 +38,9 @@
 	pop %rcx
 	pop %rbx
 	pop %rax
-	add $0x10, %rsp // Also error code and irq
+	add $0x10, %rsp
 .endm
+
+#define SAVE_SIZE 0x88
 
 #endif

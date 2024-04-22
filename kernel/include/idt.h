@@ -31,6 +31,6 @@ __packed struct idtr {
 };
 
 void enable_idt();
-int register_handler(uint64_t handler, uint8_t id, uint8_t trap, uint8_t ist);
+int register_handler(uint64_t handler, uint8_t id, uint8_t trap, uint8_t ist, uint8_t override_shim);
 
 #endif

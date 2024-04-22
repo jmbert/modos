@@ -56,15 +56,19 @@ void enable_idt() {
 	load_idt();
 }
 
-int register_handler(uint64_t handler, uint8_t id, uint8_t trap, uint8_t ist) {
+int register_handler(uint64_t handler, uint8_t id, uint8_t trap, uint8_t ist, uint8_t override_shim) {
 	if (ist & ~0b111) {
 		return 1;
 	}
-
+	if (override_shim) {
+		idt[id].offset_0_15 = handler & 0xFFFF;
+		idt[id].offset_16_31 = (handler >> 16) & 0xFFFF;
+		idt[id].offset_32_63 = (handler >> 32) & 0xFFFFFFFF;
+	}
 	handlers[id] = (uintptr_t)handler;
 
 	
-	idt[id].flags = GATE_PRESENT | GATE_KERNEL;
+	idt[id].flags = GATE_PRESENT | GATE_USER;
 	if (trap) {
 		idt[id].flags |= GATE_TRAP64;
 	} else {
@@ -73,6 +77,7 @@ int register_handler(uint64_t handler, uint8_t id, uint8_t trap, uint8_t ist) {
 
 
 	idt[id].ist = ist;
+	
 
 	return 0;
 }

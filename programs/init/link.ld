@@ -1,5 +1,5 @@
 
-ENTRY(init)
+ENTRY(entry)
 
 SECTIONS {
 	. = 0x10000;

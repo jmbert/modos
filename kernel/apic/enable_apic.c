@@ -25,7 +25,7 @@ void enable_apic() {
 	write_8(0xA1, 0xFF);
 
 	for (size_t i = 0x20; i < 0xFF; i++) {
-		register_handler((uint64_t)irq_handler, i, 0, 0);
+		register_handler((uint64_t)irq_handler, i, 0, 0, 0);
 	}
 
 	enable_lapic();	

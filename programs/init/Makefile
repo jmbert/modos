@@ -21,7 +21,8 @@ CC=$(GNUPREFIX)gcc
 LD=$(GNUPREFIX)ld
 
 OBJECTS=\
-	init.o
+	init.o\
+	entry.o
 
 DEPENDENCIES=$(OBJECTS:.o=.d)
 

@@ -9,10 +9,11 @@ void init_madt() {
 	log_printf("LAPIC Found: %p\n", lapic_base);
 
 	struct madt_hdr *hdr = &(state.madt->first_hdr);
-	size_t size = (state.madt->hdr.len - sizeof(state.madt->hdr));
+	size_t size = (state.madt->hdr.len - sizeof(*state.madt));
 	for (size_t i = 0; i < size; 
 		i+= hdr->len, 
 		hdr = (struct madt_hdr*)(((char*)hdr) + hdr->len)) {
+		log_printf("MADT header: %p:%x\n", hdr, hdr->len);
 		switch (hdr->type)
 		{
 		case IOAPIC:

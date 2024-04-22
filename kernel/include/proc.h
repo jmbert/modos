@@ -44,6 +44,8 @@ struct process {
 	uintptr_t entry_point;
 	struct regs regs;
 
+	void *kernel_stack;
+
 	uintptr_t cr3_phys;
 
 	struct vfs_node *root;
