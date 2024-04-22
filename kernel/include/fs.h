@@ -17,7 +17,6 @@ struct vfs_node;
 struct file {
 	struct vfs_node *vnode;
 	struct vfs_mount *mountpoint;
-	char *local_path;
 };
 
 struct fops {

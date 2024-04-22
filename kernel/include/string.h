@@ -12,7 +12,7 @@ void *memcpy(void *dest, void *src, size_t n);
 
 int memcmp(void *p1, void *p2, size_t n);
 
-int strcmp(void *dest, void *src);
+int strcmp(void *p1, void *p2);
 
 char *strrchr(char *s, char c);
 

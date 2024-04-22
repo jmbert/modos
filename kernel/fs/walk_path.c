@@ -19,14 +19,13 @@ static struct vfs_mount *get_mount(struct vfs_node *node) {
 void walk_path(char *path, struct file *file) {
 	struct vfs_node *current_node = state.procs[state.current_pid]->root;
 	struct vfs_mount *current_mount = get_mount(state.procs[state.current_pid]->root);
-	char *path_cpy = kmalloc(strlen(path));
-	size_t mpathbegin = 0;
-	size_t read = 0;
+	size_t maxlen = strlen(path);
 
 	for (char *pathelem = strtok(path, "/");;) {
 		if (pathelem == NULL && current_node->node_type == VFS_FILE) {
 			goto succeed;
 		} else if (pathelem == NULL) {
+			log_printf("Failed to find\n");
 			goto fail;
 		}
 
@@ -41,10 +40,17 @@ void walk_path(char *path, struct file *file) {
 		switch (current_node->node_type)
 		{
 		case VFS_SYM:
-			char *newpath = kmalloc(strlen(pathelem) + strlen(current_node->symlink) + 2);
+			char *after_ptr = pathelem;
+			for (;*after_ptr != '\0';after_ptr++);
+			after_ptr++;
+			char *newpath = kmalloc(strlen(pathelem) + strlen(current_node->symlink) + strlen(after_ptr) + 2);
 			memcpy(newpath+1, current_node->symlink, strlen(current_node->symlink));
 			newpath[1+strlen(current_node->symlink)] = '/';
 			memcpy(newpath+2+strlen(current_node->symlink), pathelem, strlen(pathelem));
+			if (after_ptr-path < maxlen) {
+				newpath[2+strlen(current_node->symlink)+strlen(pathelem)] = '/';
+				memcpy(newpath+3+strlen(current_node->symlink)+strlen(pathelem), after_ptr, strlen(after_ptr));
+			}
 
 			if (newpath[1] == '/') {
 				walk_path(newpath+1, file);
@@ -52,13 +58,12 @@ void walk_path(char *path, struct file *file) {
 			}
 			newpath[0] = '/';
 			path = newpath;
+			size_t maxlen = strlen(path);
 			pathelem = strtok(path, "/");
 			current_node = current_node->parent;
 		case VFS_DIR:
 			if (current_node->is_mount) {
 				current_mount = current_node->mount;
-				mpathbegin = read;
-				read += strlen(pathelem);
 			}
 			for (size_t i = 0; i < current_node->n_children; i++) {
 				if (!strcmp(current_node->children[i].name, pathelem)) {
@@ -81,7 +86,6 @@ void walk_path(char *path, struct file *file) {
 succeed:
 	file->vnode = current_node;
 	file->mountpoint = current_mount;
-	file->local_path = path_cpy+mpathbegin;
 	return;
 
 fail:

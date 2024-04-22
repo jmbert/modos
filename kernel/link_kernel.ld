@@ -49,7 +49,14 @@ SECTIONS {
 	.bss : AT ( ADDR(.bss) - __KERNEL_RELOC_OFFSET ) {
 		* ( .bss )
 		* ( .lbss )
+		* ( COMMON )
 	} :data
+
+	.export.sym : AT ( ADDR( .export.sym ) - __KERNEL_RELOC_OFFSET ) {
+		* ( .export.sym )
+	} :data
+	__KERNEL_EXPORT_SYM_BEGIN = ADDR(.export.sym);
+	__KERNEL_EXPORT_SYM_END = .;
 
 	. = ALIGN(4K);
 

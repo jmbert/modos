@@ -22,4 +22,10 @@ extern char *__KERNEL_START_LOW;
 
 #define KERNEL_END_PHYSICAL (KERNEL_END-KERNEL_RELOC_OFFSET)
 
+
+extern char *__KERNEL_EXPORT_SYM_BEGIN;
+#define KERNEL_EXPORT_SYM_BEGIN ((uintptr_t)(&__KERNEL_EXPORT_SYM_BEGIN))
+extern char *__KERNEL_EXPORT_SYM_END;
+#define KERNEL_EXPORT_SYM_END ((uintptr_t)(&__KERNEL_EXPORT_SYM_END))
+
 #endif

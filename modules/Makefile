@@ -3,6 +3,12 @@ export ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 MODTYPES=drivers
 
+export CFLAGS+=\
+	-fPIE\
+	-pie
+export LDFLAGS+=\
+	-pie
+
 build_modules: 
 	for type in $(MODTYPES); do\
 		make -C $$type $(MAKEFLAGS);\

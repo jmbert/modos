@@ -17,6 +17,7 @@ enum {
 	SYS_write,
 	SYS_open,
 	SYS_exit,
+	SYS_lmod,
 };
 
 void register_syscalls();

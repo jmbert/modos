@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <compiler.h>
 #include <state.h>
+#include <export.h>
 
 #ifndef SERIAL_PORT
 #define SERIAL_PORT 0x0000
@@ -35,6 +36,7 @@ static void _putchar(char c) {
 #include "printf.c"
 
 int serial_printf(char *fmt, ...) __alias(printf_);
+EXPORT_SYM(serial_printf);
 
 int init_serial() {
 

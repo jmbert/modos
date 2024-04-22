@@ -8,6 +8,8 @@ enum {
 	E_NOSYS,
 	E_INVPTR,
 	E_FDCLSD,
+	E_FILERR,
+	E_INVAL,
 };
 
 #endif

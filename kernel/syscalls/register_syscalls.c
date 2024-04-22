@@ -9,6 +9,9 @@
 #include <log.h>
 #include <kinfo.h>
 #include <errs.h>
+#include <module.h>
+#include <mm/vm.h>
+#include <string.h>
 
 #define VALIDATE_USRPTR(ptr) ((uintptr_t)ptr < USER_END)
 
@@ -41,7 +44,34 @@ void sys_read(struct regs *regs) {
 		return;
 	}
 	struct file *file = resolve_gfid(read_gfid);
+	if (file == NULL) {
+		regs->rax = -E_FILERR;
+		return;
+	}
 	regs->rax = file->vnode->fops->read(file, buf, len, offset);
+}
+
+void sys_lmod(struct regs *regs) {
+	char *path = (char*)regs->rdi;
+	if (!VALIDATE_USRPTR(path)) {
+		regs->rax = -E_INVPTR;
+		return;
+	}
+	char *path_cpy = kmalloc(strlen(path));
+	memcpy(path_cpy, path, strlen(path));
+	struct file *file = open(path);
+	if (file == NULL) {
+		regs->rax = -E_FILERR;
+		return;
+	}
+	void *entry = load_module(file);
+	if (entry == NULL) {
+		regs->rax = -E_INVAL;
+		return;
+	}
+	log_printf("Intialising at %p\n", entry);
+
+	regs->rax = ((modinit)entry)();
 }
 
 extern uint64_t sysentry();
@@ -56,6 +86,7 @@ void register_syscalls() {
 
 	syscall_table[SYS_read] = sys_read;
 	syscall_table[SYS_open] = sys_open;
+	syscall_table[SYS_lmod] = sys_lmod;
 	
 
 	enable_syscalls((uint64_t)sysentry);

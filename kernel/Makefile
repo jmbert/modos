@@ -51,7 +51,8 @@ OBJECTS=\
 	syscalls/enable_syscalls.o\
 	syscalls/sysentry.o\
 	tss/init_tss.o\
-	tss/switch_stack.o
+	tss/switch_stack.o\
+	module/load_module.o
 	
 LINKSCRIPT=$(ROOT_DIR)/link_kernel.ld
 
