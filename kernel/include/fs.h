@@ -64,4 +64,16 @@ struct file *open(char *path);
 
 void walk_path(char *path, struct file *file);
 
+typedef uint64_t fd;
+typedef uint64_t gfid;
+
+#define GFID_MAX 0x10000
+#define FD_MAX 0x1000
+
+struct file *resolve_gfid(gfid id);
+gfid add_file(struct file *file);
+void remove_file(gfid id);
+
+fd do_openat(struct vfs_node *dir, char *path);
+
 #endif

@@ -101,6 +101,10 @@ __noreturn void exec_process(struct process *proc) {
 	init_regs.error_code = 0;
 	init_regs.irq = 0x80;
 
+	proc->n_fds = state.procs[state.current_pid]->n_fds;
+	proc->fdtable = kmalloc(sizeof(fd)*FD_MAX);
+	memcpy(proc->fdtable, state.procs[state.current_pid]->fdtable, sizeof(fd)*proc->n_fds);
+
 	proc->regs = init_regs;
 
 	proc->kernel_stack = request_pages(0, STACK_SIZE / PAGE_SIZE, PG_WRITE) + STACK_SIZE;

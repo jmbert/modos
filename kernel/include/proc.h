@@ -49,14 +49,20 @@ struct process {
 	uintptr_t cr3_phys;
 
 	struct vfs_node *root;
+	struct vfs_node *cwd;
+	gfid *fdtable;
+	size_t n_fds;
 };
 
 __noreturn void exec_process(struct process *proc);
 
 __noreturn void exec_file(char *path, struct process *proc); 
 
+__noreturn void do_exec(char *file, char **argv, size_t argc, char **envv, size_t envc);
+
 void exec_elf(struct file *file, struct process *proc);
 
 #define HDR_MAX_LEN 256
+#define AUX_MAX 0x20
 
 #endif

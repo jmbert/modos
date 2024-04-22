@@ -6,12 +6,9 @@
 
 .global sysentry
 sysentry:
-	push %rcx
-	mov %rax, %rcx
+	sub $0x28, %rsp
 	sub $0x10, %rsp
 	SAVE_REGS
-	// Fixup registers to match SYSV Abi
-	mov %r8, %rcx
 	mov %rsp, %rdi
 
 	mov $syscall_table, %rdx
@@ -19,6 +16,5 @@ sysentry:
 	call *%rax
 
 	RESTORE_REGS
-	mov %rcx, %rax
-	pop %rcx
+	add $0x28, %rsp
 	sysretq

@@ -10,7 +10,7 @@
 
 #include <cpu.h>
 
-typedef uint64_t (*syscall)(struct regs *regs);
+typedef void (*syscall)(struct regs *regs);
 
 enum {
 	SYS_read,

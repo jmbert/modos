@@ -12,7 +12,6 @@ extern uint64_t gdt;
 void init_tss() {
 	uint64_t limit = sizeof(tss);
 	uint64_t base = (uint64_t)&tss;
-	uint8_t access = 0x89;
 
 
 	uint8_t *gdt_begin = (uint8_t*)P2V(&gdt);

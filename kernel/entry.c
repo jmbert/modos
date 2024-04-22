@@ -46,16 +46,27 @@ __noreturn void entry(void *mbbootinfo) {
 
 	state.n_procs = 2;
 	struct process *init_proc = kmalloc(sizeof(*init_proc));
-
-	state.procs[1] = init_proc;
+	
 	state.current_pid = 1;
+	state.procs[1] = init_proc;
+	state.n_procs = 1;
+	init_proc->_pid = 1;
 
 	log_printf("Creating initrd\n");
 	struct vfs_mount *initrd = create_initrd(multiboot_info);
 	init_proc->root = create_vfs_tar(initrd);
+	init_proc->cwd = init_proc->root;
+	init_proc->fdtable = kmalloc(sizeof(fd)*FD_MAX);
+	init_proc->n_fds = 0;
 
 	log_printf("Executing init\n");
-	exec_file("/bin/init", init_proc);
+
+	int init_argc = 1;
+	char **init_argv = (char *[]){"/bin/init"};
+	int init_envc = 0;
+	char **init_envv = (char *[]){""};
+
+	do_exec("/bin/init", init_argv, init_argc, init_envv, init_envc);
 
 	for (;;);
 }

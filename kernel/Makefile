@@ -38,12 +38,14 @@ OBJECTS=\
 	proc/exec_process.o\
 	proc/exec_file.o\
 	proc/switch_process.o\
+	proc/do_exec.o\
 	ramdisk/new_ramdisk_mount.o\
 	tar/create_vfs.o\
 	tar/tar_fileops.o\
 	fs/fsutils.o\
 	fs/open.o\
 	fs/walk_path.o\
+	fs/gfid.o\
 	proc/exec_elf.o\
 	syscalls/register_syscalls.o\
 	syscalls/enable_syscalls.o\

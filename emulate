@@ -3,4 +3,4 @@
 BUILDROOT=$PWD
 SOURCEROOT=$(dirname $(readlink -f $0))
 
-bochs
+qemu-system-x86_64 -cpu max -d int -m 16G -serial stdio $SOURCEROOT/bootable_kernel 2>log.txt
