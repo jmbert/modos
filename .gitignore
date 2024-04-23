@@ -8,6 +8,6 @@ initrd/
 programs/bin
 
 log.txt
-serial.txt
+serial*.txt
 
 bootable_kernel

@@ -117,10 +117,8 @@ void sys_mknod(struct regs *regs) {
 		regs->rax = -E_INVPTR;
 		return;
 	}
-	char *path_cpy = kmalloc(strlen(path));
-	memcpy(path_cpy, path, strlen(path));
-	char *basename = get_basename(path_cpy);
-	char *dirname = get_dirname(path_cpy);
+	char *basename = get_basename(path)+1;
+	char *dirname = get_dirname(path);
 	struct file *dir = walk_path(current_process->cwd, dirname);
                                                                                                                
   	uint32_t major;
@@ -130,7 +128,6 @@ void sys_mknod(struct regs *regs) {
   	uint32_t minor;
   	minor  = ((regs->rdx & (uint64_t) 0x00000000000000ffu) >>  0);
   	minor |= ((regs->rdx & (uint64_t) 0x00000ffffff00000u) >> 12);
-
 
 	regs->rax = mkcdev(dir->vnode, basename, major, minor);
 	return;

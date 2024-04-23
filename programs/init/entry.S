@@ -16,10 +16,10 @@ entry:
 	mov $path, %rdi
 	syscall
 
-	// mknod /dev/com1 10:0
+	// mknod /dev/com1 10:1
 	mov $SYS_mknod, %rax
 	mov $path2, %rdi
-	mov $0x1000, %rdx
+	mov $0x0a00, %rdx
 	syscall
 
 	// open /dev/com1

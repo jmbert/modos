@@ -11,7 +11,11 @@ struct file *openat(struct vfs_node *dir, char *path) {
 	if (file == NULL) {
 		return NULL;
 	}
-	file->vnode->fops->open(file->vnode, file);
+	if (file->vnode->fops->open != NULL) {
+		if (file->vnode->fops->open(file->vnode, file) != 0) {
+			return NULL;
+		}
+	}
 	return file;
 }
 
@@ -19,6 +23,9 @@ EXPORT_SYM(openat);
 
 static gfid do_openat_global(struct vfs_node *dir, char *path) {
 	struct file *f = openat(dir, path);
+	if (f == NULL) {
+		return 0;
+	}
 	gfid new_gfid = add_file(f);
 	return new_gfid;
 }
@@ -27,6 +34,9 @@ fd do_openat(struct vfs_node *dir, char *path) {
 	fd new_fd = state.procs[state.current_pid]->n_fds;
 
 	gfid new_gfid = do_openat_global(dir, path);
+	if (new_gfid == 0) {
+		return -1;
+	}
 
 	state.procs[state.current_pid]->fdtable[new_fd] = new_gfid;
 

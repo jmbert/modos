@@ -142,6 +142,7 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 	Elf64_Rela *rela = NULL;
 	size_t relasz = 0;
 	size_t relalen = 0;
+	Elf64_Rela *pltrela = NULL;
 
 	for (size_t i = 0; i < dynlen; i++) {
 		switch (dynamic[i].d_tag)
@@ -168,14 +169,21 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 		case DT_PLTRELSZ:
 			relasz += dynamic[i].d_un.d_val;
 			break;
+		case DT_JMPREL:
+			pltrela = (Elf64_Rela*)(dynamic[i].d_un.d_ptr + base_addr);
+			break;
 		default:
 			break;
 		}
 	}
+	relalen = (relasz / sizeof(Elf64_Rela));
+
+	if (rela == NULL) {
+		rela = pltrela;
+	}
 	if (syms == NULL || strtab == NULL || rela == NULL) {
 		return 0;
 	}
-	relalen = (relasz / sizeof(Elf64_Rela));
 
 	struct export_sym *ksyms = kmalloc(KERNEL_EXPORT_SYM_END-KERNEL_EXPORT_SYM_BEGIN);
 	size_t n_ksyms = 0;

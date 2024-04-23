@@ -2,7 +2,7 @@
 plugin_ctrl: unmapped=true, biosdev=true, speaker=true, extfpuirq=true, parallel=true, serial=true, iodebug=true, pcidev=false, usb_uhci=false
 config_interface: textconfig
 display_library: x
-memory: guest=32000, host=32, block_size=128
+memory: guest=64, host=64, block_size=128
 romimage: file="/usr/share/bochs/BIOS-bochs-latest", address=0x00000000, options=none, flash_data=none
 vgaromimage: file="/usr/share/bochs/VGABIOS-lgpl-latest"
 boot: cdrom
@@ -52,7 +52,7 @@ mouse: type=ps2, enabled=false, toggle=ctrl+mbutton
 speaker: enabled=true, mode=system
 parport1: enabled=true, file=none
 parport2: enabled=false
-com1: enabled=true, mode=file, dev="serial.txt"
-com2: enabled=false
-com3: enabled=false
-com4: enabled=false
+com1: enabled=true, mode=file, dev="serial1.txt"
+com2: enabled=true, mode=file, dev="serial2.txt"
+com3: enabled=true, mode=file, dev="serial3.txt"
+com4: enabled=true, mode=file, dev="serial4.txt"

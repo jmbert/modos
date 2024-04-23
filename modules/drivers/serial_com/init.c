@@ -16,9 +16,10 @@ int init_serial_port(uint16_t port) {
    	write_8(port + 4, 0x0B);    // IRQs enabled, RTS/DSR set
    	write_8(port + 4, 0x1E);    // Set in loopback mode, test the serial chip
    	write_8(port + 0, 0xAE);    // Test serial chip (send byte 0xAE and check if serial returns same byte)
-	
    	// Check if serial is faulty (i.e: not same byte as sent)
-   	if(read_8(port + 0) != 0xAE) {
+	uint8_t ack_ret = read_8(port + 0);
+	log_printf("ACK: 0x%02X\n", ack_ret);
+   	if (ack_ret != 0xAE) {
    	   	return 1;
    	}
 	
@@ -64,10 +65,14 @@ int64_t read_serial(struct file *file, void *buffer, size_t len, size_t offset) 
 }
 
 int open_serial(struct vfs_node *node, struct file *file) {
-	if (node->minor > 4) {
+	if (node->minor > 3) {
 		return -1;
 	}
-	uint64_t port_base = BDA_WORD(node->minor);
+	uint64_t port_base = BDA_WORD(node->minor*2);
+	if (port_base == 0) {
+		return -1;
+	}
+
 
 	return init_serial_port(port_base);
 }
@@ -80,8 +85,6 @@ int init_module() {
 	};
 
 	register_chrdev(MAJOR_SERIAL, &serial_fops);
-	struct file *devdir = openat(current_process->cwd, "/dev");
-	mkcdev(devdir->vnode, "com1", MAJOR_SERIAL, 0);
 
 	return 0;
 }
