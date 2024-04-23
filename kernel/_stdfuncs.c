@@ -29,15 +29,27 @@ int memcmp(void *p1, void *p2, size_t n) {
 	return 0;
 }
 
-int strcmp(void *p1, void *p2) {
-	for (size_t i = 0; ((int8_t*)(p1))[i] != '\0' || ((int8_t*)(p2))[i] != '\0'; i++) {
-		int8_t p1_c = ((int8_t*)(p1))[i];
-		int8_t p2_c = ((int8_t*)(p2))[i];
+int strcmp(char *p1, char *p2) {
+	for (size_t i = 0; ((char*)(p1))[i] != '\0' || ((char*)(p2))[i] != '\0'; i++) {
+		char p1_c = ((char*)(p1))[i];
+		char p2_c = ((char*)(p2))[i];
 		if (p1_c != p2_c) {
 			return p1_c - p2_c;
 		}
 	}
 	return 0;
+}
+
+int strncmp(char *s1, char *s2, size_t n) {
+	if (n == 0)
+		return (0);
+	do {
+		if (*s1 != *s2++)
+			return (*(unsigned char *)s1 - *(unsigned char *)--s2);
+		if (*s1++ == 0)
+			break;
+	} while (--n != 0);
+	return (0);
 }
 
 char *strrchr(char *s, char c) {

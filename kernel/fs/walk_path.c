@@ -5,6 +5,7 @@
 #include <string.h>
 #include <log.h>
 #include <mm/vm.h>
+#include <export.h>
 
 static struct vfs_mount *get_mount(struct vfs_node *node) {
 	while (!node->is_mount && node != NULL) {
@@ -16,81 +17,85 @@ static struct vfs_mount *get_mount(struct vfs_node *node) {
 	return node->mount;
 }
 
-void walk_path(char *path, struct file *file) {
-	struct vfs_node *current_node = state.procs[state.current_pid]->root;
-	struct vfs_mount *current_mount = get_mount(state.procs[state.current_pid]->root);
-	size_t maxlen = strlen(path);
+char *next_elem(char *path, size_t *len) {
+	char *path_ptr = path;
+	for (*len = 0;*path_ptr != '/' && *path_ptr != '\0'; path_ptr++, (*len)++);
+	if (*path_ptr == '\0') {
+		return NULL;
+	}
+	path_ptr++;
+	return path_ptr;
+}
 
-	for (char *pathelem = strtok(path, "/");;) {
-		if (pathelem == NULL && current_node->node_type == VFS_FILE) {
-			goto succeed;
-		} else if (pathelem == NULL) {
-			log_printf("Failed to find\n");
-			goto fail;
-		}
+struct file *walk_path(struct vfs_node *dir, char *path) {
+	struct file *f = kmalloc(sizeof(*f));
+	struct vfs_node *current_node = dir;
 
-		if (!strcmp(pathelem, ".")) {
-			continue;
-		} else if (!strcmp(pathelem, "..")) {
-			current_node = current_node->parent;
-			continue;
-		}
+	char *path_begin = kmalloc(strlen(path));
+	memcpy(path_begin, path, strlen(path));
+	size_t path_len = strlen(path_begin);
 
-
-		switch (current_node->node_type)
-		{
-		case VFS_SYM:
-			char *after_ptr = pathelem;
-			for (;*after_ptr != '\0';after_ptr++);
-			after_ptr++;
-			char *newpath = kmalloc(strlen(pathelem) + strlen(current_node->symlink) + strlen(after_ptr) + 2);
-			memcpy(newpath+1, current_node->symlink, strlen(current_node->symlink));
-			newpath[1+strlen(current_node->symlink)] = '/';
-			memcpy(newpath+2+strlen(current_node->symlink), pathelem, strlen(pathelem));
-			if (after_ptr-path < maxlen) {
-				newpath[2+strlen(current_node->symlink)+strlen(pathelem)] = '/';
-				memcpy(newpath+3+strlen(current_node->symlink)+strlen(pathelem), after_ptr, strlen(after_ptr));
-			}
-
-			if (newpath[1] == '/') {
-				walk_path(newpath+1, file);
-				return;
-			}
-			newpath[0] = '/';
-			path = newpath;
-			size_t maxlen = strlen(path);
-			pathelem = strtok(path, "/");
-			current_node = current_node->parent;
-		case VFS_DIR:
-			if (current_node->is_mount) {
-				current_mount = current_node->mount;
-			}
-			for (size_t i = 0; i < current_node->n_children; i++) {
-				if (!strcmp(current_node->children[i].name, pathelem)) {
-					current_node = &current_node->children[i];
-					pathelem = strtok(NULL, "/");
-					goto found_child;
-				}
-			}
-			goto fail;
-		found_child:
-			break;
-		case VFS_FILE:
-		default:
-			// Unknown type
-			goto fail;
-			break;
-		}
+check_path_init:
+	if (path_len == 0) {
+		goto found;
+	}
+	if (path_begin[0] == '/') {
+		current_node = current_process->root;
+		path_begin++;
+		goto check_path_init;
 	}
 
-succeed:
-	file->vnode = current_node;
-	file->mountpoint = current_mount;
-	return;
+	// Path is in the form
+	// (.*/)+/?
+	char *path_elem = path_begin;
+	size_t len = 0;
+	next_elem(path_elem, &len);
+	for (;;) {
+		if (path_elem == NULL) {
+			goto found;
+		}
+		switch (current_node->node_type)
+		{
+		case VFS_DIR:
+			for (size_t i = 0; i < current_node->n_children; i++) {
+				if (current_node->children[i].name == NULL) {
+					continue;
+				}
+				if (!strncmp(current_node->children[i].name, path_elem, len)) {
+					current_node = &current_node->children[i];
+					path_elem = next_elem(path_elem, &len);
+					goto next_check;
+				}
+			}
+			return NULL;
+			break;
+		case VFS_CDEV:
+		case VFS_FILE:
+			return NULL;
+			break;
+		case VFS_SYM:
+			struct file *symresolved = walk_path(current_node->parent, current_node->symlink);
+			if (symresolved == NULL) {
+				return NULL;
+			}
+			struct file *final = walk_path(symresolved->vnode, path_elem);
+			if (final == NULL) {
+				return NULL;
+			}
+			current_node = final->vnode;
+			goto found;
+			break;	
+		default:
+			break;
+		}
 
-fail:
-	// Not found
-	file->vnode = NULL;
-	return;
-	
+	next_check:
+	}
+
+found:
+	f->vnode = current_node;
+	f->mountpoint = get_mount(current_node);
+	return f;
 }
+
+EXPORT_SYM(walk_path);

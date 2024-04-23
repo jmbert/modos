@@ -6,7 +6,7 @@
 
 __noreturn void exec_file(char *path, struct process *proc) {
 
-	struct file *init_file = open(path);
+	struct file *init_file = openat(proc->root, path);
 	if (init_file == NULL) {
 		panic("Couldn't open file\n");
 	}

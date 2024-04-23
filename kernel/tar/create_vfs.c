@@ -78,7 +78,7 @@ struct vfs_node *create_vfs_tar(struct vfs_mount *mnt) {
 		case TAR_DIR:
 			node.node_type = VFS_DIR;
 			node.n_children = 0;
-			node.children = kmalloc(sizeof(*node.children) * 0xFF);
+			node.children = kmalloc(sizeof(*node.children) * CHILD_MAX);
 			log_printf("Created directory %s from parent %s\n", node.name, node.parent->name);
 			break;
 		case TAR_SYMLINK:

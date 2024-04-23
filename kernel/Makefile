@@ -46,6 +46,7 @@ OBJECTS=\
 	fs/open.o\
 	fs/walk_path.o\
 	fs/gfid.o\
+	fs/register_chrdev.o\
 	proc/exec_elf.o\
 	syscalls/register_syscalls.o\
 	syscalls/enable_syscalls.o\

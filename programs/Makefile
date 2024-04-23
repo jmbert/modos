@@ -1,6 +1,10 @@
 
 export ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
+HEADERS?=$(ROOT_DIR)/include
+
+export CFLAGS+=-I$(HEADERS)
+
 PROGRAMS=init
 
 build_programs: 

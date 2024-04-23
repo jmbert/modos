@@ -65,4 +65,8 @@ void exec_elf(struct file *file, struct process *proc);
 #define HDR_MAX_LEN 256
 #define AUX_MAX 0x20
 
+#include <state.h>
+
+#define current_process (state.procs[state.current_pid])
+
 #endif

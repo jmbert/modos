@@ -141,7 +141,6 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 	size_t strtlen = 0;
 	Elf64_Rela *rela = NULL;
 	size_t relasz = 0;
-	size_t relaent = 0;
 	size_t relalen = 0;
 
 	for (size_t i = 0; i < dynlen; i++) {
@@ -164,10 +163,10 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 			rela = (Elf64_Rela*)(dynamic[i].d_un.d_ptr + base_addr);
 			break;
 		case DT_RELASZ:
-			relasz = dynamic[i].d_un.d_val;
+			relasz += dynamic[i].d_un.d_val;
 			break;
-		case DT_RELAENT:
-			relaent = dynamic[i].d_un.d_val;
+		case DT_PLTRELSZ:
+			relasz += dynamic[i].d_un.d_val;
 			break;
 		default:
 			break;
@@ -176,7 +175,7 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 	if (syms == NULL || strtab == NULL || rela == NULL) {
 		return 0;
 	}
-	relalen = (relasz / relaent) + 1;
+	relalen = (relasz / sizeof(Elf64_Rela));
 
 	struct export_sym *ksyms = kmalloc(KERNEL_EXPORT_SYM_END-KERNEL_EXPORT_SYM_BEGIN);
 	size_t n_ksyms = 0;
@@ -209,7 +208,7 @@ static int resolve_syms(struct file *module_file, uintptr_t base_addr, Elf64_Dyn
 			*(uint64_t*)(rela[i].r_offset + base_addr) = ksyms[j].reloc_addr;
 			goto next_symbol;
 		}
-		return 1;
+		log_printf("Failed to resolve %s\n", strtab+sym.st_name);
 		next_symbol:
 	}
 

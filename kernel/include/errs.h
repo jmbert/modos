@@ -8,7 +8,9 @@ enum {
 	E_NOSYS,
 	E_INVPTR,
 	E_FDCLSD,
-	E_FILERR,
+	E_BADFD,
+	E_NOENT,
+	E_EXIST,
 	E_INVAL,
 };
 

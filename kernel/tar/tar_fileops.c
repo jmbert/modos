@@ -27,8 +27,13 @@ int tar_open(struct vfs_node *node, struct file *file) {
 	return 0;
 }
 
+int tar_mkdir(struct file *parent, struct vfs_node *child) {
+	return -1;
+}
+
 struct fops tar_fops = (struct fops) {
 	.open = tar_open,
 	.read = tar_read,
 	.write = tar_write,
+	.mkdir = tar_mkdir,
 };
